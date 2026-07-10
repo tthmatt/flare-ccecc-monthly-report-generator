@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 330" role="img" aria-labelledby="title desc">
+  <title id="title">Flare Dynamics logo</title>
+  <desc id="desc">Flare Dynamics wordmark with red and gray orbital arcs.</desc>
+  <rect width="980" height="330" fill="transparent"/>
+  <path d="M228 24C124 40 40 112 28 184c-8 51 27 79 101 75-45-7-72-30-65-76C75 113 142 55 228 32c14-4 14-10 0-8z" fill="#5c5c5c"/>
+  <path d="M351 34C252 48 172 119 158 191c-10 54 22 86 93 84-38-10-61-36-53-82 13-72 79-132 153-151 16-4 16-12 0-8z" fill="#ed2024"/>
+  <path d="M92 238c77-9 171-55 265-167-65 100-145 171-265 187z" fill="#333" opacity=".9"/>
+  <path d="M236 107h148v40H268v18h113v39H236z" fill="#ed2024"/>
+  <path d="M399 107h27v62c0 9 7 16 16 16h69v27h-84c-16 0-28-13-28-29z" fill="#ed2024"/>
+  <path d="M520 212l88-105h38c18 0 31 13 31 31v74h-40v-77l-66 77z" fill="#ed2024"/>
+  <path d="M689 107h112c13 0 19 6 19 19v13c0 20-11 31-32 31h-85v42h-14zm14 29v12h82c6 0 9-3 9-9v-3z" fill="#ed2024"/>
+  <path d="M836 107h144v38H867v21h113v38H836z" fill="#ed2024"/>
+  <text x="235" y="302" font-family="Arial, Helvetica, sans-serif" font-size="104" font-weight="700" letter-spacing="7" fill="#5c5c5c">Dynamics</text>
+</svg>

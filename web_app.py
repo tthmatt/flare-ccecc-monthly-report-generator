@@ -35,23 +35,26 @@ PAGE = """<!doctype html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Monthly Photo Report Generator</title>
+  <title>Flare Dynamics Monthly Photo Report Generator</title>
   <style>
-    :root { color-scheme: light; font-family: Arial, Helvetica, sans-serif; }
-    body { margin: 0; background: #f4f7fb; color: #1f2937; }
+    :root { color-scheme: light; font-family: Arial, Helvetica, sans-serif; --flare-red: #ed2024; --flare-charcoal: #222; --flare-gray: #5c5c5c; }
+    body { margin: 0; background: linear-gradient(135deg, #f7f7f8 0%, #f4f7fb 55%, #fff1f1 100%); color: #1f2937; }
     .wrap { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
-    .card { background: white; border-radius: 18px; box-shadow: 0 18px 45px rgba(31,41,55,.12); padding: 30px; }
-    h1 { margin: 0 0 8px; font-size: 30px; }
+    .brand { display: flex; align-items: center; gap: 18px; margin-bottom: 24px; }
+    .brand-logo { width: min(360px, 70vw); height: auto; display: block; }
+    .brand-name { margin: 0; color: var(--flare-gray); font-size: 14px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; }
+    .card { background: white; border-top: 6px solid var(--flare-red); border-radius: 18px; box-shadow: 0 18px 45px rgba(31,41,55,.12); padding: 30px; }
+    h1 { margin: 0 0 8px; font-size: 30px; color: var(--flare-charcoal); }
     .lead { margin: 0 0 26px; color: #4b5563; line-height: 1.5; }
     .steps { display: grid; gap: 12px; margin: 0 0 28px; padding: 0; list-style: none; }
-    .steps li { background: #eef6ff; border-left: 5px solid #2563eb; border-radius: 10px; padding: 12px 14px; }
+    .steps li { background: #fff5f5; border-left: 5px solid var(--flare-red); border-radius: 10px; padding: 12px 14px; }
     label { display: block; font-weight: 700; margin: 18px 0 8px; }
     input[type="text"], input[type="file"] { width: 100%; box-sizing: border-box; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 16px; background: white; }
     .hint { color: #64748b; font-size: 14px; margin-top: 6px; line-height: 1.4; }
     .check { display: flex; gap: 10px; align-items: flex-start; margin: 18px 0; }
     .check input { margin-top: 3px; }
-    button { background: #166534; color: white; border: 0; border-radius: 12px; padding: 14px 20px; font-size: 17px; font-weight: 700; cursor: pointer; }
-    button:hover { background: #14532d; }
+    button { background: var(--flare-red); color: white; border: 0; border-radius: 12px; padding: 14px 20px; font-size: 17px; font-weight: 700; cursor: pointer; }
+    button:hover { background: #c91418; }
     .messages { border-radius: 10px; padding: 12px 14px; margin-bottom: 20px; background: #fee2e2; color: #991b1b; }
     .footer { text-align: center; color: #64748b; font-size: 13px; margin-top: 18px; }
   </style>
@@ -59,7 +62,11 @@ PAGE = """<!doctype html>
 <body>
   <main class="wrap">
     <section class="card">
-      <h1>Monthly Photo Report Generator</h1>
+      <header class="brand" aria-label="Flare Dynamics">
+        <img class="brand-logo" src="/assets/flare-dynamics-logo.svg" alt="Flare Dynamics logo">
+        <p class="brand-name">Flare Dynamics</p>
+      </header>
+      <h1>Flare Dynamics Monthly Photo Report Generator</h1>
       <p class="lead">Create the site PDF reports from your browser. Select the month folder that contains one folder per site, enter the month label, then download a ZIP containing the generated PDFs.</p>
       {message}
       <ul class="steps">
@@ -129,6 +136,9 @@ def _zip_pdfs(pdf_paths: Iterable[Path]) -> bytes:
 
 class ReportWebHandler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
+        if self.path.startswith("/assets/"):
+            self._send_asset(self.path.removeprefix("/assets/"))
+            return
         self._send_page()
 
     def do_POST(self) -> None:
@@ -184,6 +194,19 @@ class ReportWebHandler(BaseHTTPRequestHandler):
                 self.wfile.write(zip_data)
         except Exception as exc:
             self._send_page(str(exc))
+
+
+    def _send_asset(self, asset_path: str) -> None:
+        asset = Path(__file__).with_name("assets") / secure_filename(asset_path)
+        if not asset.is_file():
+            self.send_error(404)
+            return
+        data = asset.read_bytes()
+        self.send_response(200)
+        self.send_header("Content-Type", "image/svg+xml; charset=utf-8")
+        self.send_header("Content-Length", str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
 
     def _send_page(self, message: str = "") -> None:
         message_html = f'<div class="messages">{html.escape(message)}</div>' if message else ""
