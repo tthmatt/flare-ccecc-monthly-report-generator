@@ -1,3 +1,5 @@
+https://flare-ccecc-monthly-report-generato.vercel.app
+
 # Photo Progress Reporter (Web + One-Click Local)
 
 Creates monthly photo progress PDFs that follow your rules:
