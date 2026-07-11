@@ -37,7 +37,6 @@ from typing import Optional, List
 from PIL import Image, ImageOps, ImageEnhance, ExifTags
 
 from reportlab.pdfgen import canvas
-from reportlab.lib.utils import ImageReader
 from reportlab.lib.pagesizes import A4, landscape, portrait
 from reportlab.lib.units import mm
 
@@ -155,12 +154,10 @@ def draw_photo_page(c: canvas.Canvas, img_path: Path, ts_str: str) -> None:
     One photo per page. Timestamp is OVERLAID on the photo (top-left).
     """
     with Image.open(img_path) as source_im:
-        # Normalize the image before handing it to ReportLab. Passing the original
-        # file path to drawImage can produce blank pages for some camera/browser
-        # encoded files, even though Pillow can read them. ImageReader embeds the
-        # Pillow-rendered RGB image bytes that we already validated.
+        # Normalize the image before handing it to ReportLab. Drawing from the
+        # Pillow image avoids ReportLab re-decoding camera/browser encoded files
+        # from disk, which can result in pages that contain only the timestamp.
         im = ImageOps.exif_transpose(source_im).convert("RGB")
-        image_reader = ImageReader(im)
         w, h = im.size
 
         if w >= h:
@@ -181,7 +178,7 @@ def draw_photo_page(c: canvas.Canvas, img_path: Path, ts_str: str) -> None:
         x = (page_w - draw_w) / 2
         y = (page_h - draw_h) / 2
 
-        c.drawImage(image_reader, x, y, width=draw_w, height=draw_h, preserveAspectRatio=True, mask='auto')
+        c.drawInlineImage(im, x, y, width=draw_w, height=draw_h, preserveAspectRatio=True)
 
         # Timestamp overlay (top-left inside image)
         inset_x = 6 * mm
