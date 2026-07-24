@@ -153,8 +153,11 @@ def draw_photo_page(c: canvas.Canvas, img_path: Path, ts_str: str) -> None:
     """
     One photo per page. Timestamp is OVERLAID on the photo (top-left).
     """
-    with Image.open(img_path) as im:
-        im = im.convert("RGB")
+    with Image.open(img_path) as source_im:
+        # Normalize the image before handing it to ReportLab. Drawing from the
+        # Pillow image avoids ReportLab re-decoding camera/browser encoded files
+        # from disk, which can result in pages that contain only the timestamp.
+        im = ImageOps.exif_transpose(source_im).convert("RGB")
         w, h = im.size
 
         if w >= h:
@@ -175,7 +178,7 @@ def draw_photo_page(c: canvas.Canvas, img_path: Path, ts_str: str) -> None:
         x = (page_w - draw_w) / 2
         y = (page_h - draw_h) / 2
 
-        c.drawImage(str(img_path), x, y, width=draw_w, height=draw_h, preserveAspectRatio=True, mask='auto')
+        c.drawInlineImage(im, x, y, width=draw_w, height=draw_h, preserveAspectRatio=True)
 
         # Timestamp overlay (top-left inside image)
         inset_x = 6 * mm
