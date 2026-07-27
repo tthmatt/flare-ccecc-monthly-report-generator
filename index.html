@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Flare CCECC Monthly Report Generator</title>
   <style>
-    :root{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#172033;background:#f4f7fb;--flare-red:#ed2024;--flare-gray:#5c5c5c;--flare-ink:#1d1d1f}*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#f7f7f8 0%,#f4f7fb 55%,#fff1f1 100%)}.wrap{max-width:980px;margin:0 auto;padding:32px 18px 60px}.card{background:#fff;border:1px solid #dfe6ef;border-top:6px solid var(--flare-red);border-radius:18px;box-shadow:0 10px 35px rgba(24,40,72,.08);padding:26px}.brand{display:flex;align-items:center;gap:18px;margin-bottom:24px}.brand-logo{width:min(360px,70vw);height:auto;display:block}.brand-name{margin:0;color:var(--flare-gray);font-size:14px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}h1{margin:0 0 8px;font-size:clamp(25px,4vw,38px);color:var(--flare-ink)}p{line-height:1.55}.muted{color:#667085}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}label{font-weight:700}input[type=text],input[type=file]{width:100%;padding:12px;border:1px solid #cfd8e5;border-radius:10px;background:#fff}.checks{display:flex;gap:20px;flex-wrap:wrap;margin:10px 0 22px}.actions{display:flex;gap:12px;flex-wrap:wrap}button{border:0;border-radius:10px;padding:12px 18px;font-weight:800;cursor:pointer;background:var(--flare-red);color:#fff}button.secondary{background:#f2f3f5;color:#26364d}button:disabled{opacity:.55;cursor:not-allowed}.status{margin-top:22px;padding:14px;border-radius:10px;background:#f7f9fc;border:1px solid #e1e7f0;white-space:pre-wrap;min-height:70px}.progress{height:9px;background:#e8edf5;border-radius:999px;overflow:hidden;margin-top:12px}.bar{height:100%;width:0;background:var(--flare-red);transition:width .2s}.note{margin-top:18px;padding:14px;border-left:4px solid var(--flare-red);background:#fff8f8;border-radius:8px}.files{margin-top:18px}.files ul{padding-left:20px}.ok{color:#067647}.err{color:#b42318}@media(max-width:700px){.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.card{padding:20px}.brand{align-items:flex-start;flex-direction:column}}
+    :root{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#172033;background:#f4f7fb;--flare-red:#ed2024;--flare-gray:#5c5c5c;--flare-ink:#1d1d1f}*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#f7f7f8 0%,#f4f7fb 55%,#fff1f1 100%)}.wrap{max-width:980px;margin:0 auto;padding:32px 18px 60px}.card{background:#fff;border:1px solid #dfe6ef;border-top:6px solid var(--flare-red);border-radius:18px;box-shadow:0 10px 35px rgba(24,40,72,.08);padding:26px}.brand{display:flex;align-items:center;gap:18px;margin-bottom:24px}.brand-logo{width:min(360px,70vw);height:auto;display:block}.brand-name{margin:0;color:var(--flare-gray);font-size:14px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}h1{margin:0 0 8px;font-size:clamp(25px,4vw,38px);color:var(--flare-ink)}p{line-height:1.55}.muted{color:#667085}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.hint{font-size:13px;color:#667085}label{font-weight:700}input[type=text],input[type=file]{width:100%;padding:12px;border:1px solid #cfd8e5;border-radius:10px;background:#fff}.checks{display:flex;gap:20px;flex-wrap:wrap;margin:10px 0 22px}.actions{display:flex;gap:12px;flex-wrap:wrap}button{border:0;border-radius:10px;padding:12px 18px;font-weight:800;cursor:pointer;background:var(--flare-red);color:#fff}button.secondary{background:#f2f3f5;color:#26364d}button:disabled{opacity:.55;cursor:not-allowed}.status{margin-top:22px;padding:14px;border-radius:10px;background:#f7f9fc;border:1px solid #e1e7f0;white-space:pre-wrap;min-height:70px}.progress{height:9px;background:#e8edf5;border-radius:999px;overflow:hidden;margin-top:12px}.bar{height:100%;width:0;background:var(--flare-red);transition:width .2s}.note{margin-top:18px;padding:14px;border-left:4px solid var(--flare-red);background:#fff8f8;border-radius:8px}.files{margin-top:18px}.files ul{padding-left:20px}.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}.summary-card{padding:12px;border:1px solid #dfe6ef;border-radius:10px;background:#fff}.summary-card strong{display:block;font-size:22px;margin-top:5px}.summary-card.warning{border-color:#f4b4b4;background:#fff8f8}.warning-list{margin:10px 0 0;padding-left:20px;color:#8b1d1d}.ok{color:#067647}.err{color:#b42318}@media(max-width:760px){.summary-grid{grid-template-columns:1fr 1fr}}@media(max-width:700px){.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.card{padding:20px}.brand{align-items:flex-start;flex-direction:column}}@media(max-width:430px){.summary-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -16,14 +16,23 @@
         <p class="brand-name">Flare Dynamics</p>
       </header>
       <h1>Flare Dynamics Monthly Photo Report Generator</h1>
-      <p class="muted">Select the month folder containing one subfolder per site. The app creates one PDF per site and packages them into a ZIP file. Processing happens in your browser.</p>
+      <p class="muted">Upload the raw photos without sorting them into site folders. The app reads each photo's GPS metadata, assigns it to the nearest CCECC site, creates one PDF per site, and packages the reports into a ZIP file. Processing happens in your browser.</p>
       <div class="grid">
-        <div class="field full"><label for="folder">Input month folder</label><input id="folder" type="file" webkitdirectory directory multiple accept="image/*" /></div>
+        <div class="field full">
+          <label for="photos">Raw photo files</label>
+          <input id="photos" type="file" multiple accept="image/*,.tif,.tiff" />
+          <span class="hint">Select all the original photos together. No site folders are needed.</span>
+        </div>
+        <div class="field full">
+          <label for="folder">Or choose an entire raw photo folder</label>
+          <input id="folder" type="file" webkitdirectory directory multiple accept="image/*,.tif,.tiff" />
+          <span class="hint">The folder may contain subfolders; existing folder names are ignored because GPS determines the site.</span>
+        </div>
         <div class="field"><label for="month">Month label</label><input id="month" type="text" placeholder="Jan 2026" /></div>
         <div class="field"><label for="zipName">Download filename</label><input id="zipName" type="text" value="CCECC Monthly Reports" /></div>
       </div>
       <div class="checks">
-        <label><input id="strict" type="checkbox" checked /> Strict mode</label>
+        <label><input id="strict" type="checkbox" checked /> Stop if GPS or timestamp is missing</label>
         <label><input id="ocr" type="checkbox" checked /> OCR when EXIF is missing</label>
       </div>
       <div class="actions">
@@ -31,30 +40,215 @@
         <button id="clear" class="secondary" type="button">Clear</button>
       </div>
       <div class="progress"><div id="bar" class="bar"></div></div>
-      <div id="status" class="status">Choose a folder to begin.</div>
+      <div id="status" class="status">Choose raw photo files or a raw photo folder to begin.</div>
       <div id="results" class="files"></div>
-      <div class="note"><strong>Browser limitation:</strong> very large photo sets may exceed mobile browser memory. Desktop Chrome, Edge or Safari is recommended. OCR is slower and runs only for photos without an EXIF timestamp.</div>
+      <div class="note"><strong>Keep the original files:</strong> WhatsApp and other messaging apps may remove GPS metadata. Photos with missing GPS, an uncertain site match, or a location more than 750 m from every supplied site pin are flagged for review. Very large photo sets should be processed in a desktop browser.</div>
     </section>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/exifr@7.1.3/dist/full.umd.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="site-classifier.js"></script>
   <script>
-    const folder=document.getElementById('folder'),month=document.getElementById('month'),zipName=document.getElementById('zipName'),strict=document.getElementById('strict'),ocr=document.getElementById('ocr'),generate=document.getElementById('generate'),clear=document.getElementById('clear'),statusEl=document.getElementById('status'),bar=document.getElementById('bar'),results=document.getElementById('results');
+    const photos=document.getElementById('photos'),folder=document.getElementById('folder'),month=document.getElementById('month'),zipName=document.getElementById('zipName'),strict=document.getElementById('strict'),ocr=document.getElementById('ocr'),generate=document.getElementById('generate'),clear=document.getElementById('clear'),statusEl=document.getElementById('status'),bar=document.getElementById('bar'),results=document.getElementById('results');
+    const classifier=window.CceccSiteClassifier;
     const supported=/\.(jpe?g|png|webp|tiff?)$/i;
     const log=t=>statusEl.textContent=t;
     const safe=s=>s.replace(/[\\/:*?"<>|]+/g,'-').trim();
+    const escapeHtml=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+    let classificationCache=null;
+    let scanToken=0;
+
     function parseDate(v){if(!v)return null;if(v instanceof Date&&!isNaN(v))return v;const s=String(v).replace(/^(\d{4}):(\d{2}):(\d{2})/,'$1/$2/$3');const m=s.match(/(\d{4})[\/:\-](\d{2})[\/:\-](\d{2})\s+(\d{2}):(\d{2}):(\d{2})/);if(!m)return null;const d=new Date(+m[1],+m[2]-1,+m[3],+m[4],+m[5],+m[6]);return isNaN(d)?null:d}
     function fmt(d){const p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}/${p(d.getMonth()+1)}/${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`}
     async function timestampFromExif(file){try{const data=await exifr.parse(file,{pick:['DateTimeOriginal','CreateDate','ModifyDate','DateTimeDigitized']});return parseDate(data?.DateTimeOriginal||data?.CreateDate||data?.DateTimeDigitized||data?.ModifyDate)}catch{return null}}
     async function timestampFromOcr(file){const bmp=await createImageBitmap(file);const c=document.createElement('canvas');c.width=Math.max(500,Math.round(bmp.width*.42));c.height=Math.max(120,Math.round(bmp.height*.18));const ctx=c.getContext('2d');ctx.drawImage(bmp,0,0,c.width,c.height,0,0,c.width,c.height);bmp.close();const out=await Tesseract.recognize(c,'eng',{logger:m=>{if(m.status==='recognizing text')log(`OCR ${file.name}: ${Math.round((m.progress||0)*100)}%`)}});return parseDate(out.data.text)}
-    function groups(files){const map=new Map();for(const f of files){if(!supported.test(f.name))continue;const parts=(f.webkitRelativePath||f.name).split('/').filter(Boolean);const site=parts.length>=3?parts[1]:(parts.length===2?parts[0]:'Unsorted');if(!map.has(site))map.set(site,[]);map.get(site).push(f)}return map}
     async function imageData(file){return await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)})}
     async function dimensions(file){const bmp=await createImageBitmap(file);const d={w:bmp.width,h:bmp.height};bmp.close();return d}
-    folder.addEventListener('change',()=>{const files=[...folder.files];if(files[0]?.webkitRelativePath){const root=files[0].webkitRelativePath.split('/')[0];if(!month.value){const m=root.match(/(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{4}/i);if(m)month.value=m[0]}}log(`${files.length} files selected.`)});
-    clear.addEventListener('click',()=>{folder.value='';month.value='';bar.style.width='0';results.innerHTML='';log('Choose a folder to begin.')});
-    generate.addEventListener('click',async()=>{const files=[...folder.files];if(!files.length)return log('Please select an input month folder.');if(!month.value.trim())return log('Please enter a month label.');generate.disabled=true;results.innerHTML='';bar.style.width='0';try{const grouped=groups(files);if(!grouped.size)throw new Error('No supported image files found.');const zip=new JSZip();let processed=0,total=[...grouped.values()].reduce((n,a)=>n+a.length,0);const made=[];for(const [site,siteFiles] of grouped){const items=[];for(const file of siteFiles){log(`Reading ${site}: ${file.name}`);let ts=await timestampFromExif(file);if(!ts&&ocr.checked)ts=await timestampFromOcr(file);if(!ts){if(strict.checked)throw new Error(`Timestamp not found: ${file.webkitRelativePath||file.name}`);processed++;bar.style.width=`${processed/total*100}%`;continue}items.push({file,ts});processed++;bar.style.width=`${processed/total*100}%`}items.sort((a,b)=>a.ts-b.ts||a.file.name.localeCompare(b.file.name));if(!items.length){if(strict.checked)throw new Error(`No valid photos found for ${site}`);continue}let pdf=null;for(let i=0;i<items.length;i++){const {file,ts}=items[i],d=await dimensions(file),land=d.w>=d.h;const orientation=land?'landscape':'portrait';if(!pdf)pdf=new jspdf.jsPDF({orientation,unit:'mm',format:'a4'});else pdf.addPage('a4',orientation);const pageW=pdf.internal.pageSize.getWidth(),pageH=pdf.internal.pageSize.getHeight(),margin=10,boxW=pageW-20,boxH=pageH-20,scale=Math.min(boxW/d.w,boxH/d.h),dw=d.w*scale,dh=d.h*scale,x=(pageW-dw)/2,y=(pageH-dh)/2,data=await imageData(file),type=/png$/i.test(file.name)?'PNG':'JPEG';pdf.addImage(data,type,x,y,dw,dh,undefined,'FAST');const stamp=fmt(ts);pdf.setFont('helvetica','normal');pdf.setFontSize(10);const tw=pdf.getTextWidth(stamp);pdf.setFillColor(0,0,0);pdf.rect(x+5,y+5,tw+6,7,'F');pdf.setTextColor(255,255,255);pdf.text(stamp,x+8,y+10);pdf.setTextColor(0,0,0)}const name=`${safe(site)} - ${safe(month.value.trim())}.pdf`;zip.file(name,pdf.output('arraybuffer'));made.push(name)}if(!made.length)throw new Error('No PDFs were created.');log('Packaging ZIP file...');const blob=await zip.generateAsync({type:'blob',compression:'DEFLATE',compressionOptions:{level:6}},m=>bar.style.width=`${Math.max(95,m.percent)}%`);const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`${safe(zipName.value||'CCECC Monthly Reports')} - ${safe(month.value.trim())}.zip`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),30000);bar.style.width='100%';log(`Done. Created ${made.length} PDF${made.length===1?'':'s'} and downloaded the ZIP file.`);results.innerHTML=`<div class="ok"><strong>Created:</strong><ul>${made.map(n=>`<li>${n}</li>`).join('')}</ul></div>`}catch(e){console.error(e);log(`Error: ${e.message||e}`);results.innerHTML='<div class="err">Generation stopped. Review the message above.</div>'}finally{generate.disabled=false}});
+
+    function selectedFiles(){return [...(photos.files.length?photos.files:folder.files)]}
+    function photoName(file){return file.webkitRelativePath||file.name}
+    function reasonLabel(item){
+      if(item.reason==='missing-gps')return 'GPS metadata missing';
+      if(item.reason==='outside-site-range')return `more than ${classifier.DEFAULT_MAX_DISTANCE_METERS} m from the closest site (${Math.round(item.distanceMeters)} m)`;
+      if(item.reason==='ambiguous-site')return `site match is uncertain (${Math.round(item.leadMeters)} m difference)`;
+      return 'GPS metadata invalid';
+    }
+
+    async function scanFiles(files,token){
+      const candidates=files.filter(file=>supported.test(file.name));
+      const grouped=new Map(classifier.SITE_LOCATIONS.map(site=>[site.name,[]]));
+      const unclassified=[];
+      for(let index=0;index<candidates.length;index++){
+        const file=candidates[index];
+        log(`Reading GPS metadata ${index+1} of ${candidates.length}: ${file.name}`);
+        let gps=null;
+        try{gps=await exifr.gps(file)}catch{}
+        if(token!==scanToken)return null;
+        if(!gps||!Number.isFinite(gps.latitude)||!Number.isFinite(gps.longitude)){
+          unclassified.push({file,reason:'missing-gps',distanceMeters:null,leadMeters:null});
+        }else{
+          const match=classifier.classifyCoordinate(gps.latitude,gps.longitude);
+          if(match.site){
+            grouped.get(match.site.name).push({file,gps,match});
+          }else{
+            unclassified.push({file,gps,reason:match.reason,distanceMeters:match.distanceMeters,leadMeters:match.leadMeters});
+          }
+        }
+        bar.style.width=`${(index+1)/Math.max(candidates.length,1)*100}%`;
+      }
+      return {files,candidates,grouped,unclassified,unsupportedCount:files.length-candidates.length};
+    }
+
+    function renderClassificationSummary(scan,updateStatus=true){
+      const assigned=[...scan.grouped.values()].reduce((sum,items)=>sum+items.length,0);
+      const cards=classifier.SITE_LOCATIONS.map(site=>{
+        const count=scan.grouped.get(site.name).length;
+        return `<div class="summary-card"><span>${escapeHtml(site.name)}</span><strong>${count}</strong></div>`;
+      }).join('');
+      const warningCard=`<div class="summary-card warning"><span>Needs review</span><strong>${scan.unclassified.length}</strong></div>`;
+      const warningItems=scan.unclassified.slice(0,8).map(item=>`<li>${escapeHtml(photoName(item.file))} — ${escapeHtml(reasonLabel(item))}</li>`).join('');
+      const more=scan.unclassified.length>8?`<li>…and ${scan.unclassified.length-8} more</li>`:'';
+      const warningList=scan.unclassified.length?`<div class="err"><strong>Photos not assigned:</strong><ul class="warning-list">${warningItems}${more}</ul></div>`:'<div class="ok"><strong>All photos have a confident GPS site match.</strong></div>';
+      results.innerHTML=`<strong>GPS sorting preview</strong><div class="summary-grid">${cards}${warningCard}</div>${warningList}`;
+      const unsupported=scan.unsupportedCount?` ${scan.unsupportedCount} unsupported file${scan.unsupportedCount===1?' was':'s were'} ignored.`:'';
+      if(updateStatus)log(`GPS scan complete: ${assigned} photo${assigned===1?'':'s'} assigned across four sites; ${scan.unclassified.length} need review.${unsupported}`);
+    }
+
+    async function handleSelection(source){
+      if(source===photos)folder.value='';
+      else photos.value='';
+      const files=selectedFiles();
+      const token=++scanToken;
+      classificationCache=null;
+      results.innerHTML='';
+      bar.style.width='0';
+      if(!files.length){
+        log('Choose raw photo files or a raw photo folder to begin.');
+        return;
+      }
+      if(files[0]?.webkitRelativePath&&!month.value){
+        const root=files[0].webkitRelativePath.split('/')[0];
+        const inferred=root.match(/(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{4}/i);
+        if(inferred)month.value=inferred[0];
+      }
+      generate.disabled=true;
+      try{
+        const scan=await scanFiles(files,token);
+        if(!scan)return;
+        classificationCache=scan;
+        renderClassificationSummary(scan);
+      }catch(error){
+        console.error(error);
+        log(`Error while reading GPS metadata: ${error.message||error}`);
+      }finally{
+        if(token===scanToken)generate.disabled=false;
+      }
+    }
+
+    photos.addEventListener('change',()=>handleSelection(photos));
+    folder.addEventListener('change',()=>handleSelection(folder));
+    clear.addEventListener('click',()=>{
+      scanToken++;
+      classificationCache=null;
+      photos.value='';
+      folder.value='';
+      month.value='';
+      bar.style.width='0';
+      results.innerHTML='';
+      log('Choose raw photo files or a raw photo folder to begin.');
+    });
+
+    generate.addEventListener('click',async()=>{
+      const files=selectedFiles();
+      if(!files.length)return log('Please select raw photo files or a raw photo folder.');
+      if(!month.value.trim())return log('Please enter a month label.');
+      generate.disabled=true;
+      bar.style.width='0';
+      try{
+        let scan=classificationCache;
+        if(!scan){
+          scan=await scanFiles(files,++scanToken);
+          if(!scan)return;
+          classificationCache=scan;
+        }
+        if(!scan.candidates.length)throw new Error('No supported image files found.');
+        if(scan.unclassified.length&&strict.checked){
+          throw new Error(`${scan.unclassified.length} photo${scan.unclassified.length===1?' could':'s could'} not be assigned from GPS. Review the list below, or turn off strict mode to skip ${scan.unclassified.length===1?'it':'them'}.`);
+        }
+
+        const zip=new JSZip();
+        const assignedTotal=[...scan.grouped.values()].reduce((sum,items)=>sum+items.length,0);
+        let processed=0;
+        const made=[];
+        let skippedTimestamps=0;
+
+        for(const [site,entries] of scan.grouped){
+          const items=[];
+          for(const entry of entries){
+            const file=entry.file;
+            log(`Preparing ${site}: ${file.name}`);
+            let ts=await timestampFromExif(file);
+            if(!ts&&ocr.checked)ts=await timestampFromOcr(file);
+            if(!ts){
+              if(strict.checked)throw new Error(`Timestamp not found: ${photoName(file)}`);
+              skippedTimestamps++;
+              processed++;
+              bar.style.width=`${processed/Math.max(assignedTotal,1)*100}%`;
+              continue;
+            }
+            items.push({file,ts});
+            processed++;
+            bar.style.width=`${processed/Math.max(assignedTotal,1)*100}%`;
+          }
+          items.sort((a,b)=>a.ts-b.ts||a.file.name.localeCompare(b.file.name));
+          if(!items.length)continue;
+
+          let pdf=null;
+          for(let index=0;index<items.length;index++){
+            const {file,ts}=items[index];
+            const dimensionsResult=await dimensions(file);
+            const orientation=dimensionsResult.w>=dimensionsResult.h?'landscape':'portrait';
+            if(!pdf)pdf=new jspdf.jsPDF({orientation,unit:'mm',format:'a4'});
+            else pdf.addPage('a4',orientation);
+            const pageW=pdf.internal.pageSize.getWidth(),pageH=pdf.internal.pageSize.getHeight(),boxW=pageW-20,boxH=pageH-20,scale=Math.min(boxW/dimensionsResult.w,boxH/dimensionsResult.h),drawW=dimensionsResult.w*scale,drawH=dimensionsResult.h*scale,x=(pageW-drawW)/2,y=(pageH-drawH)/2,data=await imageData(file),type=/png$/i.test(file.name)?'PNG':'JPEG';
+            pdf.addImage(data,type,x,y,drawW,drawH,undefined,'FAST');
+            const stamp=fmt(ts);
+            pdf.setFont('helvetica','normal');
+            pdf.setFontSize(10);
+            const textWidth=pdf.getTextWidth(stamp);
+            pdf.setFillColor(0,0,0);
+            pdf.rect(x+5,y+5,textWidth+6,7,'F');
+            pdf.setTextColor(255,255,255);
+            pdf.text(stamp,x+8,y+10);
+            pdf.setTextColor(0,0,0);
+          }
+          const name=`${safe(site)} - ${safe(month.value.trim())}.pdf`;
+          zip.file(name,pdf.output('arraybuffer'));
+          made.push(name);
+        }
+
+        if(!made.length)throw new Error('No PDFs were created.');
+        log('Packaging ZIP file...');
+        const blob=await zip.generateAsync({type:'blob',compression:'DEFLATE',compressionOptions:{level:6}},progress=>bar.style.width=`${Math.max(95,progress.percent)}%`);
+        const anchor=document.createElement('a');
+        anchor.href=URL.createObjectURL(blob);
+        anchor.download=`${safe(zipName.value||'CCECC Monthly Reports')} - ${safe(month.value.trim())}.zip`;
+        anchor.click();
+        setTimeout(()=>URL.revokeObjectURL(anchor.href),30000);
+        bar.style.width='100%';
+        const skipped=scan.unclassified.length+skippedTimestamps;
+        log(`Done. Created ${made.length} site PDF${made.length===1?'':'s'} and downloaded the ZIP file.${skipped?` ${skipped} photo${skipped===1?' was':'s were'} skipped.`:''}`);
+        results.innerHTML=`<div class="ok"><strong>Created:</strong><ul>${made.map(name=>`<li>${escapeHtml(name)}</li>`).join('')}</ul></div>${skipped?`<div class="err">${skipped} photo${skipped===1?' was':'s were'} skipped because GPS or timestamp metadata was unavailable.</div>`:''}`;
+      }catch(error){
+        console.error(error);
+        log(`Error: ${error.message||error}`);
+        if(classificationCache)renderClassificationSummary(classificationCache,false);
+      }finally{
+        generate.disabled=false;
+      }
+    });
   </script>
 </body>
 </html>
