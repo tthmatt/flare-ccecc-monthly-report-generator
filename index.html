@@ -50,6 +50,7 @@
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script src="site-classifier.js"></script>
+  <script src="pdf-image.js"></script>
   <script>
     const photos=document.getElementById('photos'),folder=document.getElementById('folder'),month=document.getElementById('month'),zipName=document.getElementById('zipName'),strict=document.getElementById('strict'),ocr=document.getElementById('ocr'),generate=document.getElementById('generate'),clear=document.getElementById('clear'),statusEl=document.getElementById('status'),bar=document.getElementById('bar'),results=document.getElementById('results');
     const classifier=window.CceccSiteClassifier;
@@ -64,8 +65,6 @@
     function fmt(d){const p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}/${p(d.getMonth()+1)}/${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`}
     async function timestampFromExif(file){try{const data=await exifr.parse(file,{pick:['DateTimeOriginal','CreateDate','ModifyDate','DateTimeDigitized']});return parseDate(data?.DateTimeOriginal||data?.CreateDate||data?.DateTimeDigitized||data?.ModifyDate)}catch{return null}}
     async function timestampFromOcr(file){const bmp=await createImageBitmap(file);const c=document.createElement('canvas');c.width=Math.max(500,Math.round(bmp.width*.42));c.height=Math.max(120,Math.round(bmp.height*.18));const ctx=c.getContext('2d');ctx.drawImage(bmp,0,0,c.width,c.height,0,0,c.width,c.height);bmp.close();const out=await Tesseract.recognize(c,'eng',{logger:m=>{if(m.status==='recognizing text')log(`OCR ${file.name}: ${Math.round((m.progress||0)*100)}%`)}});return parseDate(out.data.text)}
-    async function imageData(file){return await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)})}
-    async function dimensions(file){const bmp=await createImageBitmap(file);const d={w:bmp.width,h:bmp.height};bmp.close();return d}
 
     function selectedFiles(){return [...(photos.files.length?photos.files:folder.files)]}
     function photoName(file){return file.webkitRelativePath||file.name}
@@ -208,12 +207,16 @@
           let pdf=null;
           for(let index=0;index<items.length;index++){
             const {file,ts}=items[index];
-            const dimensionsResult=await dimensions(file);
-            const orientation=dimensionsResult.w>=dimensionsResult.h?'landscape':'portrait';
+            // Decode and re-encode every input as a real JPEG before handing it
+            // to jsPDF. Passing WebP/TIFF bytes while labelling them as JPEG (or
+            // embedding camera JPEG variants directly) can produce image XObjects
+            // that macOS Preview renders as blank pages.
+            const pdfImage=await window.PdfImage.normalizeForPdf(file);
+            const orientation=pdfImage.width>=pdfImage.height?'landscape':'portrait';
             if(!pdf)pdf=new jspdf.jsPDF({orientation,unit:'mm',format:'a4'});
             else pdf.addPage('a4',orientation);
-            const pageW=pdf.internal.pageSize.getWidth(),pageH=pdf.internal.pageSize.getHeight(),boxW=pageW-20,boxH=pageH-20,scale=Math.min(boxW/dimensionsResult.w,boxH/dimensionsResult.h),drawW=dimensionsResult.w*scale,drawH=dimensionsResult.h*scale,x=(pageW-drawW)/2,y=(pageH-drawH)/2,data=await imageData(file),type=/png$/i.test(file.name)?'PNG':'JPEG';
-            pdf.addImage(data,type,x,y,drawW,drawH,undefined,'FAST');
+            const pageW=pdf.internal.pageSize.getWidth(),pageH=pdf.internal.pageSize.getHeight(),boxW=pageW-20,boxH=pageH-20,scale=Math.min(boxW/pdfImage.width,boxH/pdfImage.height),drawW=pdfImage.width*scale,drawH=pdfImage.height*scale,x=(pageW-drawW)/2,y=(pageH-drawH)/2;
+            pdf.addImage(pdfImage.data,pdfImage.format,x,y,drawW,drawH);
             const stamp=fmt(ts);
             pdf.setFont('helvetica','normal');
             pdf.setFontSize(10);
