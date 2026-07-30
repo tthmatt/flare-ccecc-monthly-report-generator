@@ -16,6 +16,9 @@
     .preview-image{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:9px;background:#eef2f6}
     .preview-name{margin:9px 0 3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--flare-ink);font-size:15px}
     .preview-meta{margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#667085;font-size:13px;line-height:1.45}
+    .preview-site-label{display:block;margin:9px 0 5px;color:#344054;font-size:12px;font-weight:800}
+    .preview-site-select{width:100%;padding:8px 30px 8px 9px;border:1px solid #cfd8e5;border-radius:8px;background:#fff;color:var(--flare-ink);font:inherit;font-size:13px;font-weight:700}
+    .preview-site-select:focus{outline:3px solid rgba(237,32,36,.16);border-color:var(--flare-red)}
     @media(max-width:900px){.preview-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
     @media(max-width:650px){.preview-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media(max-width:400px){.preview-grid{grid-template-columns:1fr}}
@@ -127,6 +130,7 @@
       if(item.reason==='missing-gps')return 'GPS metadata missing';
       if(item.reason==='outside-site-range')return `more than ${classifier.DEFAULT_MAX_DISTANCE_METERS} m from the closest site (${Math.round(item.distanceMeters)} m)`;
       if(item.reason==='ambiguous-site')return `site match is uncertain (${Math.round(item.leadMeters)} m difference)`;
+      if(item.reason==='manual-review')return 'manually marked for review';
       return 'GPS metadata invalid';
     }
 
@@ -141,7 +145,7 @@
       clearPreview();
       const items=[];
       for(const [site,entries] of scan.grouped){
-        entries.forEach(entry=>items.push({file:entry.file,site,distanceMeters:entry.match.distanceMeters,review:false}));
+        entries.forEach(entry=>items.push({file:entry.file,gps:entry.gps,site,distanceMeters:entry.match.distanceMeters,manual:entry.match.manual,review:false}));
       }
       scan.unclassified.forEach(item=>items.push({...item,site:'Needs review',review:true}));
       items.sort((a,b)=>photoName(a.file).localeCompare(photoName(b.file),undefined,{numeric:true}));
@@ -160,19 +164,82 @@
         name.className='preview-name';
         name.textContent=photoName(item.file);
         name.title=photoName(item.file);
-        const site=document.createElement('p');
-        site.className='preview-meta';
-        site.textContent=item.site;
-        site.title=item.site;
+        const siteLabel=document.createElement('label');
+        siteLabel.className='preview-site-label';
+        siteLabel.textContent='Report site';
+        const siteSelect=document.createElement('select');
+        siteSelect.className='preview-site-select';
+        siteSelect.setAttribute('aria-label',`Report site for ${photoName(item.file)}`);
+        const choices=[{value:'',label:'Needs review'},...classifier.SITE_LOCATIONS.map(site=>({value:site.name,label:site.name}))];
+        choices.forEach(choice=>{
+          const option=document.createElement('option');
+          option.value=choice.value;
+          option.textContent=choice.label;
+          option.selected=choice.label===item.site;
+          siteSelect.append(option);
+        });
+        siteSelect.addEventListener('change',()=>{
+          const targetSite=siteSelect.value;
+          reassignPhoto(scan,item.file,targetSite);
+          classificationCache=scan;
+          renderClassificationSummary(scan,false);
+          log(`${photoName(item.file)} moved to ${targetSite||'Needs review'}.`);
+        });
         const detail=document.createElement('p');
         detail.className='preview-meta';
-        detail.textContent=item.review?reasonLabel(item):`${Math.round(item.distanceMeters)} m from site pin`;
-        card.append(image,name,site,detail);
+        detail.textContent=item.review?reasonLabel(item):(item.manual?'Manually assigned':`${Math.round(item.distanceMeters)} m from site pin`);
+        card.append(image,name,siteLabel,siteSelect,detail);
         fragment.append(card);
       });
       previewGrid.append(fragment);
       previewCount.textContent=`${items.length} shown`;
       preview.hidden=!items.length;
+    }
+
+    function reassignPhoto(scan,file,targetSiteName){
+      let source=null;
+      for(const entries of scan.grouped.values()){
+        const index=entries.findIndex(entry=>entry.file===file);
+        if(index!==-1){
+          source=entries.splice(index,1)[0];
+          break;
+        }
+      }
+      if(!source){
+        const index=scan.unclassified.findIndex(entry=>entry.file===file);
+        if(index!==-1)source=scan.unclassified.splice(index,1)[0];
+      }
+      if(!source)return;
+
+      const gps=source.gps||null;
+      if(!targetSiteName){
+        scan.unclassified.push({
+          file,
+          gps,
+          reason:'manual-review',
+          distanceMeters:null,
+          leadMeters:null,
+        });
+        return;
+      }
+
+      const site=classifier.SITE_LOCATIONS.find(candidate=>candidate.name===targetSiteName);
+      if(!site)return;
+      const distanceMeters=gps
+        ?classifier.haversineMeters(gps.latitude,gps.longitude,site.latitude,site.longitude)
+        :null;
+      scan.grouped.get(site.name).push({
+        file,
+        gps,
+        match:{
+          site,
+          reason:null,
+          distanceMeters,
+          leadMeters:null,
+          rankings:[],
+          manual:true,
+        },
+      });
     }
 
     async function scanFiles(files,token){

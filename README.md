@@ -19,7 +19,7 @@ Open <https://flare-ccecc-monthly-report-generato.vercel.app>.
    - TPE Tampines
    - PIE Tampines
    - PIE Simei
-4. Resolve any photo shown under **Needs review**, or turn off strict mode to skip it.
+4. Use the **Report site** selector below any preview to correct a GPS match, including moving a photo to or from **Needs review**.
 5. Click **Generate PDFs** and save the ZIP download.
 
 No site folders or manual sorting are required. Processing stays in the browser and the selected photos are not uploaded to an application server.
@@ -31,6 +31,8 @@ The app assigns each photo to the nearest supplied site pin. It flags a photo fo
 - GPS metadata is missing or invalid.
 - The closest site pin is more than 750 m away.
 - The closest and second-closest site matches differ by less than 20 m.
+
+The two TPE site pins are close together. Always check their image previews and use the per-photo **Report site** selector if the photographed work site differs from the nearest GPS pin. Manual corrections update the PDF grouping before the ZIP is generated.
 
 Use original camera or drone files. Messaging and photo-sharing apps may remove EXIF GPS metadata.
 
