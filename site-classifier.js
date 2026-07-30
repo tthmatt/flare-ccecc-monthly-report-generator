@@ -38,6 +38,15 @@
     }),
   ]);
 
+  const PRIORITY_ASSIGNMENT_ZONES = Object.freeze([
+    Object.freeze({
+      siteId: "tpe-pasir-ris",
+      latitude: 1.36584,
+      longitude: 103.95374833333334,
+      radiusMeters: 5,
+    }),
+  ]);
+
   function isValidCoordinate(latitude, longitude) {
     return (
       Number.isFinite(latitude) &&
@@ -80,6 +89,35 @@
         distanceMeters: null,
         leadMeters: null,
         rankings: [],
+      };
+    }
+
+    const priorityZone = PRIORITY_ASSIGNMENT_ZONES.find(
+      (zone) =>
+        haversineMeters(
+          latitude,
+          longitude,
+          zone.latitude,
+          zone.longitude
+        ) <= zone.radiusMeters
+    );
+
+    if (priorityZone) {
+      const site = SITE_LOCATIONS.find(
+        (candidate) => candidate.id === priorityZone.siteId
+      );
+      return {
+        site,
+        reason: null,
+        distanceMeters: haversineMeters(
+          latitude,
+          longitude,
+          site.latitude,
+          site.longitude
+        ),
+        leadMeters: null,
+        rankings: [],
+        assignmentRule: "priority-zone",
       };
     }
 
@@ -128,6 +166,7 @@
 
   return Object.freeze({
     SITE_LOCATIONS,
+    PRIORITY_ASSIGNMENT_ZONES,
     DEFAULT_MAX_DISTANCE_METERS,
     DEFAULT_MIN_LEAD_METERS,
     haversineMeters,
