@@ -3,6 +3,7 @@ const assert = require("node:assert/strict");
 
 const {
   SITE_LOCATIONS,
+  PRIORITY_ASSIGNMENT_ZONES,
   classifyCoordinate,
   haversineMeters,
 } = require("../site-classifier.js");
@@ -43,6 +44,33 @@ test("coordinates on the midpoint between close pins remain unclassified", () =>
 
   assert.equal(result.site, null);
   assert.equal(result.reason, "ambiguous-site");
+});
+
+test("coordinates within the 5 m priority zone classify as TPE Pasir Ris", () => {
+  const zone = PRIORITY_ASSIGNMENT_ZONES[0];
+  const latitudeOffsetFor4Point999Meters =
+    (4.999 / 6371008.8) * (180 / Math.PI);
+
+  for (const latitude of [
+    zone.latitude,
+    zone.latitude + latitudeOffsetFor4Point999Meters,
+  ]) {
+    const result = classifyCoordinate(latitude, zone.longitude);
+    assert.equal(result.site?.id, "tpe-pasir-ris");
+    assert.equal(result.assignmentRule, "priority-zone");
+  }
+});
+
+test("the 5 m priority zone does not override coordinates outside its radius", () => {
+  const zone = PRIORITY_ASSIGNMENT_ZONES[0];
+  const latitudeOffsetFor5Point1Meters =
+    (5.1 / 6371008.8) * (180 / Math.PI);
+  const result = classifyCoordinate(
+    zone.latitude + latitudeOffsetFor5Point1Meters,
+    zone.longitude
+  );
+
+  assert.notEqual(result.assignmentRule, "priority-zone");
 });
 
 test("haversine distance is symmetric", () => {
